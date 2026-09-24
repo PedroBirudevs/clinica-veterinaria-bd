@@ -37,6 +37,11 @@ erDiagram
 
     ATENDIMENTO ||--o{ LOG_ATENDIMENTO : audita
 
+    CLIENTE ||--o{ PONTUACAO : acumula
+    ATENDIMENTO |o--o{ PONTUACAO : gera
+    CLIENTE ||--o{ CLIENTE_CONQUISTA : desbloqueia
+    CONQUISTA ||--o{ CLIENTE_CONQUISTA : "é obtida em"
+
     PESSOA {
         int id_pessoa PK
         char cpf UK "11 dígitos"
@@ -165,7 +170,41 @@ erDiagram
         varchar usuario_banco
         timestamp registrado_em
     }
+
+    NIVEL {
+        int id_nivel PK
+        varchar nome UK
+        int pontos_minimos UK
+    }
+
+    CONQUISTA {
+        int id_conquista PK
+        varchar nome UK
+        text descricao
+        int pontos_bonus
+    }
+
+    PONTUACAO {
+        int id_pontuacao PK
+        int id_cliente FK
+        int id_atendimento FK "nulo"
+        int pontos
+        varchar motivo
+        timestamp registrado_em
+    }
+
+    CLIENTE_CONQUISTA {
+        int id_cliente PK,FK
+        int id_conquista PK,FK
+        timestamp obtida_em
+    }
 ```
+
+## Inovação: programa de fidelidade
+
+Gamificação para o tutor (cliente): a cada atendimento ele ganha 10 pontos, desbloqueia conquistas (Primeira consulta, Cliente fiel, Família grande) que dão pontos extras e sobe de nível (Bronze 0, Prata 50, Ouro 150). A visão `vw_ranking_clientes` mostra o ranking com posição, pontos e nível atual.
+
+A tabela `nivel` fica fora dos relacionamentos de propósito: o nível é calculado comparando o total de pontos com `pontos_minimos`.
 
 ## Scripts
 
@@ -203,6 +242,18 @@ Os scripts estão na pasta scripts/, na ordem que devem ser executados:
 30. insert_into_produto_e_servico.sql
 31. insert_into_atendimento.sql
 32. update_delete_validacao_comportamento.sql
+33. create_table_nivel.sql
+34. create_table_conquista.sql
+35. create_table_pontuacao.sql
+36. create_table_cliente_conquista.sql
+37. create_view_ranking_clientes.sql
+38. insert_into_gamificacao.sql
+
+## Protótipo
+
+Protótipo visual do sistema em `prototipo/index.html` (HTML, CSS e JavaScript puro, com dados fictícios). Não precisa instalar nada nem conectar ao banco: basta abrir o arquivo com dois cliques ou arrastar para o navegador. Qualquer usuário e senha entram. Funciona também no celular.
+
+Telas: início, pessoas, atendimentos e produtos, fidelidade (pontos, nível, conquistas e ranking). O que for cadastrado fica só na memória e some ao recarregar a página.
 
 Autor Pedro Henrique Silva - [@PedroBirudevs] -- LINK DO REPOSITORIO --
 [https://github.com/PedroBirudevs/clinica-veterinaria-bd](https://github.com/PedroBirudevs/clinica-veterinaria-bd)
