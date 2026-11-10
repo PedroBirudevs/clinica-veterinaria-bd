@@ -29,394 +29,731 @@
   --ok-bg:#122E22; --erro-bg:#331916; --alerta-bg:#2E2512;
 }
 *{box-sizing:border-box}
-body{
-  margin:0;background:var(--fundo);color:var(--texto);
-  font-family:Inter,system-ui,sans-serif;font-size:15px;line-height:1.5;
-}
-.wrap{max-width:1100px;margin:0 auto;padding:28px 16px 64px}
-h1{font-size:22px;font-weight:700;margin:0 0 4px}
-.sub{color:var(--suave);font-size:14px;margin:0 0 24px}
+body{margin:0;background:var(--fundo);color:var(--texto);
+  font-family:Inter,system-ui,sans-serif;font-size:15px;line-height:1.5}
+.wrap{max-width:1000px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:21px;font-weight:700;margin:0 0 4px}
+.sub{color:var(--suave);font-size:13.5px;margin:0 0 18px}
 
-/* navegacao entre telas */
-.nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:22px;
-  padding-bottom:18px;border-bottom:1px solid var(--borda)}
-.nav button{
-  font:inherit;font-size:13px;padding:7px 12px;border-radius:7px;
-  border:1px solid var(--borda);background:var(--fundo);color:var(--suave);
-  cursor:pointer;white-space:nowrap}
-.nav button:hover{border-color:var(--azul)}
-.nav button[aria-current="true"]{background:var(--azul);border-color:var(--azul);color:#fff;font-weight:600}
+/* painel de dados de teste */
+.testes{border:1px solid var(--borda);border-radius:10px;background:var(--superficie);
+  margin-bottom:20px;font-size:13px;overflow:hidden}
+.testes summary{cursor:pointer;padding:11px 15px;font-weight:600;list-style:none}
+.testes summary::-webkit-details-marker{display:none}
+.testes summary::before{content:"▸ ";color:var(--azul)}
+.testes[open] summary::before{content:"▾ "}
+.testes .conteudo{padding:0 15px 14px;color:var(--suave)}
+.testes code{background:var(--azul-claro);color:var(--azul-escuro);
+  padding:1px 6px;border-radius:4px;font-size:12.5px;font-weight:600}
+.testes ul{margin:7px 0 0;padding-left:18px}
+.testes li{margin-bottom:5px}
 
-/* etiqueta de rastreabilidade */
-.rf{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+.rf{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:12px}
 .tag{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:99px;
-  background:var(--azul-claro);color:var(--azul-escuro);letter-spacing:.2px}
+  background:var(--azul-claro);color:var(--azul-escuro)}
 .tag.alt{background:var(--alerta-bg);color:var(--alerta)}
 
-/* moldura da tela */
-.tela{display:none}
-.tela.on{display:block}
-.frame{border:1px solid var(--borda);border-radius:14px;overflow:hidden;
-  background:var(--fundo);box-shadow:0 1px 2px rgba(0,0,0,.04)}
-.topbar{display:flex;align-items:center;justify-content:space-between;
-  gap:12px;padding:12px 18px;background:var(--azul);color:#fff}
-.topbar .marca{font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px}
-.topbar .user{font-size:12.5px;opacity:.9}
+.frame{border:1px solid var(--borda);border-radius:14px;overflow:hidden;background:var(--fundo)}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 18px;background:var(--azul);color:#fff}
+.topbar .marca{font-weight:700;font-size:15px}
+.topbar .user{font-size:12.5px;opacity:.92}
 .corpo{padding:22px 20px}
 .tituloTela{font-size:17px;font-weight:600;margin:0 0 3px}
 .descTela{color:var(--suave);font-size:13.5px;margin:0 0 18px}
 
-/* formulario */
 .campo{margin-bottom:14px}
-label{display:block;font-size:12.5px;font-weight:600;color:var(--suave);
-  margin-bottom:5px;letter-spacing:.2px}
-input,select,textarea{
-  width:100%;font:inherit;font-size:14px;padding:9px 11px;border-radius:8px;
-  border:1px solid var(--borda);background:var(--superficie);color:var(--texto)}
-textarea{min-height:66px;resize:vertical}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--suave);margin-bottom:5px}
+input,select,textarea{width:100%;font:inherit;font-size:14px;padding:9px 11px;
+  border-radius:8px;border:1px solid var(--borda);background:var(--superficie);color:var(--texto)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--azul);outline-offset:-1px}
+textarea{min-height:68px;resize:vertical}
+input.ruim,select.ruim,textarea.ruim{border-color:var(--erro);background:var(--erro-bg)}
+.erroCampo{color:var(--erro);font-size:12.5px;margin-top:4px;font-weight:500}
 .dupla{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.tripla{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-@media(max-width:620px){.dupla,.tripla{grid-template-columns:1fr}}
+@media(max-width:620px){.dupla{grid-template-columns:1fr}}
 
-/* botoes */
 .acoes{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
-.btn{font:inherit;font-size:14px;font-weight:600;padding:10px 18px;
-  border-radius:8px;border:1px solid transparent;cursor:pointer}
+.btn{font:inherit;font-size:14px;font-weight:600;padding:10px 18px;border-radius:8px;
+  border:1px solid transparent;cursor:pointer}
 .btn.p{background:var(--azul);color:#fff}
 .btn.p:hover{background:var(--azul-escuro)}
 .btn.s{background:var(--fundo);color:var(--azul);border-color:var(--azul)}
 .btn.g{background:var(--fundo);color:var(--suave);border-color:var(--borda)}
+.btn.d{background:var(--erro);color:#fff}
+.btn.mini{font-size:12.5px;padding:5px 11px}
 
-/* listas e cards */
-.card{border:1px solid var(--borda);border-radius:10px;padding:14px;
-  background:var(--fundo);margin-bottom:10px;cursor:pointer}
+.card{border:1px solid var(--borda);border-radius:10px;padding:13px 14px;
+  background:var(--fundo);margin-bottom:9px;cursor:pointer}
 .card:hover{border-color:var(--azul);background:var(--superficie)}
 .card.sel{border-color:var(--azul);background:var(--azul-claro)}
+.card.bloq{opacity:.6;cursor:not-allowed}
 .card .nome{font-weight:600;font-size:15px}
-.card .meta{color:var(--suave);font-size:13px;margin-top:3px}
-.card.inativo{opacity:.62}
+.card .meta{color:var(--suave);font-size:13px;margin-top:2px}
 
-/* avisos */
-.aviso{border-radius:9px;padding:13px 15px;font-size:13.5px;margin-bottom:16px;
-  border-left:3px solid}
+.aviso{border-radius:9px;padding:13px 15px;font-size:13.5px;margin-bottom:16px;border-left:3px solid}
 .aviso.erro{background:var(--erro-bg);border-color:var(--erro);color:var(--erro)}
 .aviso.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
 .aviso.alerta{background:var(--alerta-bg);border-color:var(--alerta);color:var(--alerta)}
 .aviso strong{display:block;margin-bottom:3px}
-.erroCampo{color:var(--erro);font-size:12.5px;margin-top:4px}
-input.ruim,select.ruim{border-color:var(--erro);background:var(--erro-bg)}
 
-/* tabela */
-table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
 th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;
-  color:var(--suave);padding:8px 10px;border-bottom:1px solid var(--borda)}
-td{padding:10px;border-bottom:1px solid var(--borda)}
+  color:var(--suave);padding:8px 9px;border-bottom:1px solid var(--borda)}
+td{padding:9px;border-bottom:1px solid var(--borda);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 .num{text-align:right;font-variant-numeric:tabular-nums}
 .total{font-weight:700;font-size:15px}
+td input.qtd{width:66px;padding:5px 7px;font-size:13px;text-align:right}
+.semItens{color:var(--suave);font-size:13.5px;padding:14px 0;text-align:center}
 
-/* dashboard */
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:20px}
 @media(max-width:720px){.kpis{grid-template-columns:repeat(2,1fr)}}
-.kpi{border:1px solid var(--borda);border-radius:10px;padding:14px;background:var(--superficie)}
-.kpi .v{font-size:23px;font-weight:700;line-height:1.1}
-.kpi .l{font-size:12px;color:var(--suave);margin-top:3px}
+.kpi{border:1px solid var(--borda);border-radius:10px;padding:13px;background:var(--superficie)}
+.kpi .v{font-size:22px;font-weight:700;line-height:1.1}
+.kpi .l{font-size:12px;color:var(--suave);margin-top:2px}
 
-/* selo de pontos */
 .selo{display:inline-flex;align-items:center;gap:7px;background:var(--azul-claro);
-  color:var(--azul-escuro);border-radius:99px;padding:5px 13px;font-size:13px;font-weight:600}
+  color:var(--azul-escuro);border-radius:99px;padding:6px 14px;font-size:13px;font-weight:600}
 
 .passos{display:flex;gap:6px;margin-bottom:18px;font-size:12px;flex-wrap:wrap}
 .passo{padding:4px 10px;border-radius:6px;background:var(--superficie);color:var(--suave)}
 .passo.at{background:var(--azul);color:#fff;font-weight:600}
 .passo.fim{background:var(--ok-bg);color:var(--ok)}
 
-.nota{margin-top:16px;padding:13px 15px;border:1px dashed var(--borda);
-  border-radius:9px;font-size:13px;color:var(--suave);background:var(--superficie)}
+.nota{margin-top:16px;padding:12px 14px;border:1px dashed var(--borda);
+  border-radius:9px;font-size:12.5px;color:var(--suave);background:var(--superficie)}
 .nota b{color:var(--texto)}
+.add{display:flex;gap:9px;align-items:flex-end;margin-top:10px;flex-wrap:wrap}
+.add .campo{margin:0;flex:1;min-width:170px}
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <h1>Protótipo navegável — Sistema de Clínica Veterinária</h1>
-<p class="sub">Fluxo principal: registrar um atendimento. 8 telas, com caminho de erro e cancelamento.
-Referência visual para montagem no Figma.</p>
+<p class="sub">Fluxo de registro de atendimento, com validações funcionais.</p>
 
-<nav class="nav" id="nav"></nav>
-
-<!-- 1 - LOGIN -->
-<section class="tela" data-t="1">
-  <div class="rf"><span class="tag">RF01 — Autenticar usuário</span><span class="tag">Entidade: Pessoa / Atendente</span></div>
-  <div class="frame">
-    <div class="topbar"><span class="marca">Clínica Veterinária</span></div>
-    <div class="corpo" style="max-width:420px;margin:0 auto;padding:40px 20px">
-      <h2 class="tituloTela">Acessar o sistema</h2>
-      <p class="descTela">Informe matrícula e senha.</p>
-      <div class="campo"><label>Matrícula</label><input value="AT2026001"></div>
-      <div class="campo"><label>Senha</label><input type="password" value="••••••••"></div>
-      <div class="acoes"><button class="btn p" onclick="ir(2)">Entrar</button></div>
-      <div class="nota"><b>Atributos:</b> atendente.matricula, pessoa.nome</div>
-    </div>
+<details class="testes">
+  <summary>Dados para teste — como forçar cada validação</summary>
+  <div class="conteudo">
+    <p><b>Login:</b> matrícula <code>AT2026001</code> · senha <code>vet2026</code></p>
+    <ul>
+      <li><b>Erro de login:</b> digite qualquer outra matrícula ou senha.</li>
+      <li><b>Cliente não encontrado:</b> busque por um nome ou CPF inexistente, como <code>zzz</code>.</li>
+      <li><b>Animal inativo:</b> tente selecionar o gato <b>Pingo</b>, de Carlos Lima.</li>
+      <li><b>Campo obrigatório:</b> finalize o atendimento sem preencher o descritivo.</li>
+      <li><b>Atendimento sem itens:</b> finalize sem lançar nenhum serviço ou produto.</li>
+      <li><b>Estoque insuficiente:</b> lance o <b>Shampoo medicamentoso</b> com quantidade acima de 2.</li>
+      <li><b>Cancelamento:</b> clique em Cancelar em qualquer etapa do fluxo.</li>
+    </ul>
   </div>
-</section>
+</details>
 
-<!-- 2 - DASHBOARD -->
-<section class="tela" data-t="2">
-  <div class="rf"><span class="tag">RF02 — Visualizar painel de atendimentos</span><span class="tag">Entidade: Atendimento</span></div>
-  <div class="frame">
-    <div class="topbar"><span class="marca">Clínica Veterinária</span><span class="user">Ana Souza · Atendente</span></div>
-    <div class="corpo">
+<div class="rf" id="rf"></div>
+<div class="frame">
+  <div class="topbar">
+    <span class="marca">Clínica Veterinária</span>
+    <span class="user" id="user"></span>
+  </div>
+  <div class="corpo" id="tela"></div>
+</div>
+
+</div>
+
+<script>
+// ---------------------------------------------------------------
+// DADOS (espelham as entidades do diagrama de classes)
+// ---------------------------------------------------------------
+const ATENDENTE = { matricula:"AT2026001", senha:"vet2026", nome:"Ana Souza", turno:"MANHA" };
+
+const CLIENTES = [
+  { id:1, cpf:"12345678900", nome:"Carlos Lima", telefone:"(69) 99999-1234",
+    nivel:"Prata", pontos:320 },
+  { id:2, cpf:"98765432100", nome:"Juliana Reis", telefone:"(69) 98888-4321",
+    nivel:"Bronze", pontos:85 },
+  { id:3, cpf:"45678912300", nome:"Pedro Alves", telefone:"(69) 97777-5678",
+    nivel:"Ouro", pontos:640 },
+];
+
+const ANIMAIS = [
+  { id:1, idCliente:1, nome:"Mel",   especie:"Canina", sexo:"F", idade:4, peso:12.400, castrado:true,  ativo:true },
+  { id:2, idCliente:1, nome:"Thor",  especie:"Canina", sexo:"M", idade:2, peso:28.100, castrado:false, ativo:true },
+  { id:3, idCliente:1, nome:"Pingo", especie:"Felina", sexo:"M", idade:9, peso:4.800,  castrado:true,  ativo:false },
+  { id:4, idCliente:2, nome:"Luna",  especie:"Felina", sexo:"F", idade:3, peso:3.900,  castrado:true,  ativo:true },
+  { id:5, idCliente:3, nome:"Nina",  especie:"Canina", sexo:"F", idade:6, peso:9.200,  castrado:true,  ativo:true },
+];
+
+const VETERINARIOS = [
+  { id:1, nome:"Dra. Paula Andrade", crmv:"12345", especialidade:"Clínica geral" },
+  { id:2, nome:"Dr. Marcos Vieira",  crmv:"54321", especialidade:"Dermatologia" },
+];
+
+const SERVICOS = [
+  { id:1, nome:"Consulta clínica geral",  valor:120.00 },
+  { id:2, nome:"Exame dermatológico",     valor:80.00  },
+  { id:3, nome:"Vacinação antirrábica",   valor:65.00  },
+  { id:4, nome:"Banho e tosa higiênica",  valor:70.00  },
+];
+
+// estoque_atual é o que as validações consultam
+const PRODUTOS = [
+  { id:1, descricao:"Antipulgas tópico 15 mg",        valor:65.00, estoque:8 },
+  { id:2, descricao:"Shampoo medicamentoso 200 ml",   valor:45.00, estoque:2 },
+  { id:3, descricao:"Vermífugo comprimido",           valor:28.00, estoque:15 },
+  { id:4, descricao:"Coleira antiparasitária",        valor:92.00, estoque:0 },
+];
+
+// ---------------------------------------------------------------
+// ESTADO
+// ---------------------------------------------------------------
+let st = {};
+function zerarAtendimento(){
+  st.cliente = null; st.animal = null;
+  st.idVet = 1; st.descritivo = ""; st.desconto = 0;
+  st.servicos = []; st.produtos = [];
+  st.busca = ""; st.erros = {}; st.aviso = null;
+  st.numeroGerado = null;
+}
+function zerarTudo(){ st = { logado:false }; zerarAtendimento(); }
+zerarTudo();
+
+// ---------------------------------------------------------------
+// UTILIDADES
+// ---------------------------------------------------------------
+const $ = (id) => document.getElementById(id);
+const brl = (v) => "R$ " + v.toFixed(2).replace(".", ",");
+const esc = (s) => String(s).replace(/[&<>"]/g, c =>
+  ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+const cpfFmt = (c) => c.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+
+function totalAtendimento(){
+  const s = st.servicos.reduce((a,i) => a + i.valor * i.qtd, 0);
+  const p = st.produtos.reduce((a,i) => a + i.valor * i.qtd, 0);
+  return Math.max(0, s + p - st.desconto);
+}
+// regra de gamificação: 1 ponto a cada R$ 10 gastos
+const pontosDoTotal = (t) => Math.floor(t / 10);
+
+function avisoHTML(){
+  if (!st.aviso) return "";
+  const a = st.aviso;
+  return `<div class="aviso ${a.tipo}"><strong>${esc(a.titulo)}</strong>${esc(a.texto)}</div>`;
+}
+function erroDe(campo){
+  return st.erros[campo] ? `<div class="erroCampo">${esc(st.erros[campo])}</div>` : "";
+}
+const cls = (campo) => st.erros[campo] ? " ruim" : "";
+
+function passos(n){
+  const nomes = ["1. Tutor","2. Animal","3. Serviços","4. Confirmação"];
+  return `<div class="passos">` + nomes.map((t,i) => {
+    const k = i + 1;
+    const c = k < n ? "passo fim" : (k === n ? "passo at" : "passo");
+    return `<span class="${c}">${t}${k < n ? " ✓" : ""}</span>`;
+  }).join("") + `</div>`;
+}
+
+// ---------------------------------------------------------------
+// TELAS
+// ---------------------------------------------------------------
+const TELAS = {};
+
+// --- 1. LOGIN -----------------------------------------------------
+TELAS.login = {
+  rf: ['<span class="tag">RF01 — Autenticar usuário</span>',
+       '<span class="tag">Entidade: Pessoa / Atendente</span>'],
+  html(){
+    return `
+      <div style="max-width:400px;margin:0 auto;padding:26px 0">
+        ${avisoHTML()}
+        <h2 class="tituloTela">Acessar o sistema</h2>
+        <p class="descTela">Informe matrícula e senha.</p>
+        <div class="campo">
+          <label>Matrícula</label>
+          <input id="iMat" class="${cls("matricula").trim()}" value="${esc(st.matDigitada||"")}" placeholder="AT2026001">
+          ${erroDe("matricula")}
+        </div>
+        <div class="campo">
+          <label>Senha</label>
+          <input id="iSen" type="password" class="${cls("senha").trim()}" placeholder="••••••">
+          ${erroDe("senha")}
+        </div>
+        <div class="acoes"><button class="btn p" onclick="fazerLogin()">Entrar</button></div>
+        <div class="nota"><b>Atributos:</b> atendente.matricula, pessoa.nome</div>
+      </div>`;
+  }
+};
+
+function fazerLogin(){
+  const m = $("iMat").value.trim();
+  const s = $("iSen").value;
+  st.matDigitada = m;
+  st.erros = {}; st.aviso = null;
+
+  if (!m) st.erros.matricula = "Informe a matrícula.";
+  if (!s) st.erros.senha = "Informe a senha.";
+
+  if (!st.erros.matricula && !st.erros.senha &&
+      (m.toUpperCase() !== ATENDENTE.matricula || s !== ATENDENTE.senha)) {
+    st.aviso = { tipo:"erro", titulo:"Não foi possível entrar",
+      texto:"Matrícula ou senha incorretos. Verifique os dados e tente novamente." };
+  }
+  if (Object.keys(st.erros).length || st.aviso) return render("login");
+
+  st.logado = true; st.matDigitada = "";
+  render("inicio");
+}
+
+// --- 2. INÍCIO ----------------------------------------------------
+TELAS.inicio = {
+  rf: ['<span class="tag">RF02 — Visualizar painel de atendimentos</span>',
+       '<span class="tag">Entidade: Atendimento</span>'],
+  html(){
+    const baixos = PRODUTOS.filter(p => p.estoque <= 2).length;
+    return `
+      ${avisoHTML()}
       <h2 class="tituloTela">Início</h2>
       <p class="descTela">Resumo do dia.</p>
       <div class="kpis">
         <div class="kpi"><div class="v">12</div><div class="l">Atendimentos hoje</div></div>
         <div class="kpi"><div class="v">3</div><div class="l">Em aberto</div></div>
         <div class="kpi"><div class="v">R$ 2.840</div><div class="l">Faturamento do dia</div></div>
-        <div class="kpi"><div class="v">4</div><div class="l">Produtos em falta</div></div>
+        <div class="kpi"><div class="v">${baixos}</div><div class="l">Produtos em falta</div></div>
       </div>
-      <h3 style="font-size:14px;margin:0 0 10px">Últimos atendimentos</h3>
+      <h3 style="font-size:14px;margin:0 0 9px">Últimos atendimentos</h3>
       <table>
         <tr><th>Animal</th><th>Tutor</th><th>Veterinário</th><th>Status</th><th class="num">Total</th></tr>
         <tr><td>Mel</td><td>Carlos Lima</td><td>Dra. Paula</td><td>Finalizado</td><td class="num">R$ 240,00</td></tr>
         <tr><td>Thor</td><td>Juliana Reis</td><td>Dr. Marcos</td><td>Aberto</td><td class="num">R$ 95,00</td></tr>
         <tr><td>Nina</td><td>Pedro Alves</td><td>Dra. Paula</td><td>Finalizado</td><td class="num">R$ 410,00</td></tr>
       </table>
-      <div class="acoes"><button class="btn p" onclick="ir(3)">Novo atendimento</button></div>
-      <div class="nota"><b>Atributos:</b> atendimento.data_hora, atendimento.status, animal.nome, veterinario.crmv</div>
-    </div>
-  </div>
-</section>
+      <div class="acoes">
+        <button class="btn p" onclick="novoAtendimento()">Novo atendimento</button>
+        <button class="btn g" onclick="sair()">Sair</button>
+      </div>
+      <div class="nota"><b>Atributos:</b> atendimento.data_hora, atendimento.status, animal.nome, veterinario.crmv</div>`;
+  }
+};
+function novoAtendimento(){ zerarAtendimento(); render("tutor"); }
+function sair(){ zerarTudo(); render("login"); }
 
-<!-- 3 - BUSCAR TUTOR -->
-<section class="tela" data-t="3">
-  <div class="rf"><span class="tag">RF03 — Localizar cliente por CPF ou nome</span><span class="tag">Entidade: Cliente / Pessoa</span></div>
-  <div class="frame">
-    <div class="topbar"><span class="marca">Clínica Veterinária</span><span class="user">Ana Souza · Atendente</span></div>
-    <div class="corpo">
-      <div class="passos"><span class="passo at">1. Tutor</span><span class="passo">2. Animal</span><span class="passo">3. Serviços</span><span class="passo">4. Confirmação</span></div>
+// --- 3. TUTOR -----------------------------------------------------
+TELAS.tutor = {
+  rf: ['<span class="tag">RF03 — Localizar cliente por CPF ou nome</span>',
+       '<span class="tag">Entidade: Cliente / Pessoa</span>'],
+  html(){
+    const q = st.busca.trim().toLowerCase();
+    // só compara CPF quando a busca tem dígitos: "".includes("") é sempre true
+    const digitos = q.replace(/\D/g, "");
+    const achados = q
+      ? CLIENTES.filter(c => c.nome.toLowerCase().includes(q)
+          || (digitos.length > 0 && c.cpf.includes(digitos)))
+      : CLIENTES;
+
+    const lista = achados.length
+      ? achados.map(c => `
+          <div class="card${st.cliente && st.cliente.id===c.id ? " sel":""}" onclick="escolherCliente(${c.id})">
+            <div class="nome">${esc(c.nome)}</div>
+            <div class="meta">CPF ${cpfFmt(c.cpf)} · ${esc(c.telefone)} · Nível ${esc(c.nivel)} · ${c.pontos} pontos</div>
+          </div>`).join("")
+      : `<div class="aviso erro"><strong>Nenhum cliente encontrado</strong>
+         Não há cliente cadastrado com "${esc(st.busca)}". Verifique o dado ou cadastre o tutor.</div>`;
+
+    return `
+      ${passos(1)}
+      ${avisoHTML()}
       <h2 class="tituloTela">Identificar o tutor</h2>
       <p class="descTela">Busque pelo CPF ou pelo nome do responsável.</p>
-      <div class="campo"><label>CPF ou nome</label><input value="Carlos"></div>
-      <div class="card sel" onclick="ir(4)">
-        <div class="nome">Carlos Lima</div>
-        <div class="meta">CPF 123.456.789-00 · (69) 99999-1234 · Nível Prata · 320 pontos</div>
+      <div class="campo">
+        <label>CPF ou nome</label>
+        <input id="iBusca" value="${esc(st.busca)}" placeholder="Digite para filtrar"
+               oninput="buscar(this.value)">
+        ${erroDe("cliente")}
       </div>
-      <div class="card" onclick="ir(4)">
-        <div class="nome">Carlos Eduardo Nunes</div>
-        <div class="meta">CPF 987.654.321-00 · (69) 98888-4321 · Nível Bronze · 85 pontos</div>
-      </div>
+      ${lista}
       <div class="acoes">
-        <button class="btn p" onclick="ir(4)">Continuar</button>
-        <button class="btn g" onclick="ir(2)">Cancelar</button>
+        <button class="btn p" onclick="confirmarCliente()">Continuar</button>
+        <button class="btn g" onclick="pedirCancelamento()">Cancelar</button>
       </div>
-      <div class="nota"><b>Atributos:</b> pessoa.cpf, pessoa.nome, pessoa.telefone, nivel.nome, pontuacao.pontos</div>
-    </div>
-  </div>
-</section>
+      <div class="nota"><b>Atributos:</b> pessoa.cpf, pessoa.nome, pessoa.telefone, nivel.nome, pontuacao.pontos</div>`;
+  }
+};
+function buscar(v){
+  st.busca = v; st.erros = {}; st.aviso = null;
+  st.foco = "iBusca";          // devolve o cursor ao campo depois do render
+  render("tutor");
+}
+function escolherCliente(id){
+  st.cliente = CLIENTES.find(c => c.id === id);
+  st.animal = null; st.erros = {};
+  render("tutor");
+}
+function confirmarCliente(){
+  st.erros = {}; st.aviso = null;
+  if (!st.cliente){
+    st.erros.cliente = "Selecione um tutor na lista para continuar.";
+    return render("tutor");
+  }
+  render("animal");
+}
 
-<!-- 4 - SELECIONAR ANIMAL -->
-<section class="tela" data-t="4">
-  <div class="rf"><span class="tag">RF04 — Selecionar animal do tutor</span><span class="tag alt">Caminho alternativo: animal inativo</span><span class="tag">Entidade: Animal / Espécie</span></div>
-  <div class="frame">
-    <div class="topbar"><span class="marca">Clínica Veterinária</span><span class="user">Ana Souza · Atendente</span></div>
-    <div class="corpo">
-      <div class="passos"><span class="passo fim">1. Tutor ✓</span><span class="passo at">2. Animal</span><span class="passo">3. Serviços</span><span class="passo">4. Confirmação</span></div>
-      <h2 class="tituloTela">Animais de Carlos Lima</h2>
+// --- 4. ANIMAL ----------------------------------------------------
+TELAS.animal = {
+  rf: ['<span class="tag">RF04 — Selecionar animal do tutor</span>',
+       '<span class="tag alt">Alternativo: animal inativo</span>',
+       '<span class="tag">Entidade: Animal / Espécie</span>'],
+  html(){
+    const meus = ANIMAIS.filter(a => a.idCliente === st.cliente.id);
+    const lista = meus.map(a => `
+      <div class="card${st.animal && st.animal.id===a.id ? " sel":""}${a.ativo ? "":" bloq"}"
+           onclick="escolherAnimal(${a.id})">
+        <div class="nome">${esc(a.nome)}${a.ativo ? "" :
+          ' <span style="font-weight:400;font-size:12.5px;color:var(--erro)">· inativo</span>'}</div>
+        <div class="meta">${esc(a.especie)} · ${a.sexo==="F"?"Fêmea":"Macho"} · ${a.idade} anos ·
+          ${a.peso.toFixed(3).replace(".",",")} kg · ${a.castrado?"Castrado":"Não castrado"}</div>
+      </div>`).join("");
+
+    return `
+      ${passos(2)}
+      ${avisoHTML()}
+      <h2 class="tituloTela">Animais de ${esc(st.cliente.nome)}</h2>
       <p class="descTela">Só animais ativos podem receber atendimento.</p>
-      <div class="card sel" onclick="ir(5)">
-        <div class="nome">Mel</div>
-        <div class="meta">Canina · Fêmea · 4 anos · 12,400 kg · Castrada</div>
-      </div>
-      <div class="card" onclick="ir(5)">
-        <div class="nome">Thor</div>
-        <div class="meta">Canina · Macho · 2 anos · 28,100 kg · Não castrado</div>
-      </div>
-      <div class="card inativo" onclick="erroInativo()">
-        <div class="nome">Pingo <span style="font-weight:400;font-size:12.5px;color:var(--erro)">· inativo</span></div>
-        <div class="meta">Felina · Macho · 9 anos · 4,800 kg</div>
-      </div>
-      <div id="avisoInativo"></div>
+      ${lista}
+      ${erroDe("animal")}
       <div class="acoes">
-        <button class="btn p" onclick="ir(5)">Continuar</button>
-        <button class="btn s" onclick="ir(3)">Voltar</button>
-        <button class="btn g" onclick="ir(2)">Cancelar</button>
+        <button class="btn p" onclick="confirmarAnimal()">Continuar</button>
+        <button class="btn s" onclick="voltar('tutor')">Voltar</button>
+        <button class="btn g" onclick="pedirCancelamento()">Cancelar</button>
       </div>
-      <div class="nota"><b>Atributos:</b> animal.nome, animal.sexo, animal.peso_kg, animal.castrado, animal.ativo, especie.nome
-      · <b>Regra:</b> trigger valida_tutor_do_animal</div>
-    </div>
-  </div>
-</section>
+      <div class="nota"><b>Atributos:</b> animal.nome, animal.sexo, animal.peso_kg, animal.castrado,
+      animal.ativo, especie.nome · <b>Regra:</b> trigger valida_tutor_do_animal</div>`;
+  }
+};
+function escolherAnimal(id){
+  const a = ANIMAIS.find(x => x.id === id);
+  st.erros = {}; st.aviso = null;
+  // mesma validação do trigger: animal inativo não recebe atendimento
+  if (!a.ativo){
+    st.animal = null;
+    st.aviso = { tipo:"erro", titulo:"Animal indisponível",
+      texto:`O animal "${a.nome}" está inativo e não pode receber atendimento. `
+          + `Reative o cadastro ou escolha outro animal.` };
+    return render("animal");
+  }
+  st.animal = a;
+  render("animal");
+}
+function confirmarAnimal(){
+  st.erros = {}; st.aviso = null;
+  if (!st.animal){
+    st.erros.animal = "Selecione um animal ativo para continuar.";
+    return render("animal");
+  }
+  render("itens");
+}
+function voltar(t){ st.erros = {}; st.aviso = null; render(t); }
 
-<!-- 5 - SERVICOS E PRODUTOS -->
-<section class="tela" data-t="5">
-  <div class="rf"><span class="tag">RF05 — Registrar serviços e produtos</span><span class="tag">Entidade: Serviço / Produto / Atendimento</span></div>
-  <div class="frame">
-    <div class="topbar"><span class="marca">Clínica Veterinária</span><span class="user">Ana Souza · Atendente</span></div>
-    <div class="corpo">
-      <div class="passos"><span class="passo fim">1. Tutor ✓</span><span class="passo fim">2. Animal ✓</span><span class="passo at">3. Serviços</span><span class="passo">4. Confirmação</span></div>
-      <h2 class="tituloTela">Atendimento de Mel</h2>
-      <p class="descTela">Tutor: Carlos Lima · Canina, 4 anos, 12,400 kg</p>
+// --- 5. SERVIÇOS E PRODUTOS ---------------------------------------
+TELAS.itens = {
+  rf: ['<span class="tag">RF05 — Registrar serviços e produtos</span>',
+       '<span class="tag alt">Erro: estoque insuficiente</span>',
+       '<span class="tag">Entidade: Serviço / Produto / Atendimento</span>'],
+  html(){
+    const vets = VETERINARIOS.map(v =>
+      `<option value="${v.id}"${v.id===st.idVet?" selected":""}>${esc(v.nome)} — CRMV ${v.crmv}</option>`).join("");
+
+    const optS = SERVICOS.map(s =>
+      `<option value="${s.id}">${esc(s.nome)} — ${brl(s.valor)}</option>`).join("");
+    const optP = PRODUTOS.map(p =>
+      `<option value="${p.id}">${esc(p.descricao)} — ${brl(p.valor)} (estoque: ${p.estoque})</option>`).join("");
+
+    const linhasS = st.servicos.length ? st.servicos.map((i,k) => `
+      <tr><td>${esc(i.nome)}</td>
+        <td class="num">${i.qtd}</td>
+        <td class="num">${brl(i.valor)}</td>
+        <td class="num">${brl(i.valor*i.qtd)}</td>
+        <td class="num"><button class="btn g mini" onclick="removerServico(${k})">Remover</button></td></tr>`).join("")
+      : `<tr><td colspan="5" class="semItens">Nenhum serviço lançado</td></tr>`;
+
+    const linhasP = st.produtos.length ? st.produtos.map((i,k) => {
+      const prod = PRODUTOS.find(p => p.id === i.id);
+      const excede = i.qtd > prod.estoque;
+      return `
+      <tr><td>${esc(i.nome)}</td>
+        <td class="num"><input id="qtd${k}" class="qtd${excede?" ruim":""}" type="number" min="1" value="${i.qtd}"
+            oninput="mudarQtd(${k}, this.value)"></td>
+        <td class="num"${excede?' style="color:var(--erro);font-weight:600"':''}>${prod.estoque}</td>
+        <td class="num">${brl(i.valor*i.qtd)}</td>
+        <td class="num"><button class="btn g mini" onclick="removerProduto(${k})">Remover</button></td></tr>`;
+    }).join("") : `<tr><td colspan="5" class="semItens">Nenhum produto lançado</td></tr>`;
+
+    const t = totalAtendimento();
+
+    return `
+      ${passos(3)}
+      ${avisoHTML()}
+      <h2 class="tituloTela">Atendimento de ${esc(st.animal.nome)}</h2>
+      <p class="descTela">Tutor: ${esc(st.cliente.nome)} · ${esc(st.animal.especie)},
+        ${st.animal.idade} anos, ${st.animal.peso.toFixed(3).replace(".",",")} kg</p>
+
       <div class="dupla">
         <div class="campo"><label>Veterinário responsável</label>
-          <select><option>Dra. Paula Andrade — CRMV 12345</option><option>Dr. Marcos Vieira — CRMV 54321</option></select></div>
-        <div class="campo"><label>Data e hora</label><input value="10/11/2026 10:30"></div>
+          <select id="iVet" onchange="st.idVet=Number(this.value)">${vets}</select></div>
+        <div class="campo"><label>Data e hora</label>
+          <input value="${agora()}" readonly></div>
       </div>
-      <div class="campo"><label>Descritivo do atendimento</label>
-        <textarea>Tutor relata coceira intensa e perda de pelo na região do dorso há cerca de uma semana.</textarea></div>
-      <h3 style="font-size:14px;margin:18px 0 8px">Serviços</h3>
-      <table>
-        <tr><th>Serviço</th><th class="num">Qtd</th><th class="num">Valor</th></tr>
-        <tr><td>Consulta clínica geral</td><td class="num">1</td><td class="num">R$ 120,00</td></tr>
-        <tr><td>Exame dermatológico</td><td class="num">1</td><td class="num">R$ 80,00</td></tr>
-      </table>
-      <h3 style="font-size:14px;margin:18px 0 8px">Produtos</h3>
-      <table>
-        <tr><th>Produto</th><th class="num">Qtd</th><th class="num">Estoque</th><th class="num">Valor</th></tr>
-        <tr><td>Antipulgas tópico 15 mg</td><td class="num">1</td><td class="num">8</td><td class="num">R$ 65,00</td></tr>
-        <tr><td>Shampoo medicamentoso 200 ml</td><td class="num" style="color:var(--erro);font-weight:600">3</td><td class="num">2</td><td class="num">R$ 45,00</td></tr>
-      </table>
-      <div class="acoes">
-        <button class="btn p" onclick="ir(6)">Finalizar atendimento</button>
-        <button class="btn s" onclick="ir(4)">Voltar</button>
-        <button class="btn g" onclick="ir(8)">Cancelar</button>
-      </div>
-      <div class="nota"><b>Atributos:</b> atendimento.descritivo, atendimento.data_hora, servico.valor_padrao,
-      produto.estoque_atual, atendimento_produto.quantidade, atendimento_servico.valor_unitario</div>
-    </div>
-  </div>
-</section>
 
-<!-- 6 - ERRO DE ESTOQUE -->
-<section class="tela" data-t="6">
-  <div class="rf"><span class="tag alt">Caminho de erro — falha de validação</span><span class="tag">RF06 — Validar estoque antes de confirmar</span></div>
-  <div class="frame">
-    <div class="topbar"><span class="marca">Clínica Veterinária</span><span class="user">Ana Souza · Atendente</span></div>
-    <div class="corpo">
-      <div class="passos"><span class="passo fim">1. Tutor ✓</span><span class="passo fim">2. Animal ✓</span><span class="passo at">3. Serviços</span><span class="passo">4. Confirmação</span></div>
-      <div class="aviso erro">
-        <strong>Não foi possível finalizar o atendimento</strong>
-        Estoque insuficiente para "Shampoo medicamentoso 200 ml": solicitado 3, disponível 2.
-        Ajuste a quantidade ou remova o produto.
+      <div class="campo">
+        <label>Descritivo do atendimento *</label>
+        <textarea id="iDesc" class="${cls("descritivo").trim()}"
+          oninput="st.descritivo=this.value"
+          placeholder="Relato do tutor, sintomas observados...">${esc(st.descritivo)}</textarea>
+        ${erroDe("descritivo")}
       </div>
-      <h2 class="tituloTela">Atendimento de Mel</h2>
-      <p class="descTela">Tutor: Carlos Lima · Canina, 4 anos, 12,400 kg</p>
-      <h3 style="font-size:14px;margin:18px 0 8px">Produtos</h3>
-      <table>
-        <tr><th>Produto</th><th class="num">Qtd</th><th class="num">Estoque</th><th class="num">Valor</th></tr>
-        <tr><td>Antipulgas tópico 15 mg</td><td class="num">1</td><td class="num">8</td><td class="num">R$ 65,00</td></tr>
-      </table>
-      <div class="campo" style="margin-top:14px;max-width:320px">
-        <label>Shampoo medicamentoso 200 ml — quantidade</label>
-        <input class="ruim" value="3">
-        <div class="erroCampo">Máximo disponível: 2 unidades</div>
-      </div>
-      <div class="acoes">
-        <button class="btn p" onclick="ir(7)">Corrigir e finalizar</button>
-        <button class="btn s" onclick="ir(5)">Voltar</button>
-        <button class="btn g" onclick="ir(8)">Cancelar atendimento</button>
-      </div>
-      <div class="nota"><b>Regra:</b> trigger baixa_estoque_produto — bloqueia quando quantidade &gt; produto.estoque_atual</div>
-    </div>
-  </div>
-</section>
 
-<!-- 7 - CONFIRMACAO -->
-<section class="tela" data-t="7">
-  <div class="rf"><span class="tag">RF07 — Confirmar atendimento e calcular total</span><span class="tag">RF08 — Creditar pontos ao cliente</span></div>
-  <div class="frame">
-    <div class="topbar"><span class="marca">Clínica Veterinária</span><span class="user">Ana Souza · Atendente</span></div>
-    <div class="corpo">
-      <div class="passos"><span class="passo fim">1. Tutor ✓</span><span class="passo fim">2. Animal ✓</span><span class="passo fim">3. Serviços ✓</span><span class="passo at">4. Confirmação</span></div>
-      <div class="aviso ok">
-        <strong>Atendimento registrado com sucesso</strong>
-        Nº 1048 · 10/11/2026 às 10:30 · Status: Finalizado
+      <h3 style="font-size:14px;margin:18px 0 6px">Serviços</h3>
+      <table>
+        <tr><th>Serviço</th><th class="num">Qtd</th><th class="num">Valor</th>
+            <th class="num">Subtotal</th><th></th></tr>
+        ${linhasS}
+      </table>
+      <div class="add">
+        <div class="campo"><label>Adicionar serviço</label><select id="selS">${optS}</select></div>
+        <button class="btn s" onclick="addServico()">Adicionar</button>
       </div>
+
+      <h3 style="font-size:14px;margin:22px 0 6px">Produtos</h3>
+      <table>
+        <tr><th>Produto</th><th class="num">Qtd</th><th class="num">Estoque</th>
+            <th class="num">Subtotal</th><th></th></tr>
+        ${linhasP}
+      </table>
+      <div class="add">
+        <div class="campo"><label>Adicionar produto</label><select id="selP">${optP}</select></div>
+        <button class="btn s" onclick="addProduto()">Adicionar</button>
+      </div>
+      ${erroDe("itens")}
+
+      <div class="campo" style="max-width:220px;margin-top:20px">
+        <label>Desconto (R$)</label>
+        <input id="iDesconto" type="number" min="0" step="0.01" value="${st.desconto}"
+          class="${cls("desconto").trim()}" oninput="mudarDesconto(this.value)">
+        ${erroDe("desconto")}
+      </div>
+
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--borda);
+                  display:flex;justify-content:flex-end;gap:14px;align-items:baseline">
+        <span style="color:var(--suave);font-size:13px">Total do atendimento</span>
+        <span class="total" style="font-size:19px">${brl(t)}</span>
+      </div>
+
+      <div class="acoes">
+        <button class="btn p" onclick="finalizar()">Finalizar atendimento</button>
+        <button class="btn s" onclick="voltar('animal')">Voltar</button>
+        <button class="btn g" onclick="pedirCancelamento()">Cancelar</button>
+      </div>
+      <div class="nota"><b>Atributos:</b> atendimento.descritivo, atendimento.desconto,
+      servico.valor_padrao, produto.estoque_atual, atendimento_produto.quantidade
+      · <b>Regra:</b> trigger baixa_estoque_produto</div>`;
+  }
+};
+
+function agora(){
+  const d = new Date();
+  const p = (n) => String(n).padStart(2,"0");
+  return `${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+function addServico(){
+  const id = Number($("selS").value);
+  const s = SERVICOS.find(x => x.id === id);
+  const ja = st.servicos.find(x => x.id === id);
+  if (ja) ja.qtd++; else st.servicos.push({ id:s.id, nome:s.nome, valor:s.valor, qtd:1 });
+  st.erros = {}; st.aviso = null;
+  render("itens");
+}
+function addProduto(){
+  const id = Number($("selP").value);
+  const p = PRODUTOS.find(x => x.id === id);
+  st.erros = {}; st.aviso = null;
+  if (p.estoque === 0){
+    st.aviso = { tipo:"erro", titulo:"Produto sem estoque",
+      texto:`"${p.descricao}" está com estoque zerado e não pode ser lançado.` };
+    return render("itens");
+  }
+  const ja = st.produtos.find(x => x.id === id);
+  if (ja) ja.qtd++; else st.produtos.push({ id:p.id, nome:p.descricao, valor:p.valor, qtd:1 });
+  render("itens");
+}
+function removerServico(k){ st.servicos.splice(k,1); st.erros={}; st.aviso=null; render("itens"); }
+function removerProduto(k){ st.produtos.splice(k,1); st.erros={}; st.aviso=null; render("itens"); }
+function mudarQtd(k, v){
+  const n = Math.max(1, Math.floor(Number(v) || 1));
+  st.produtos[k].qtd = n;
+  st.erros = {}; st.aviso = null;
+  st.foco = "qtd" + k;
+  render("itens");
+}
+function mudarDesconto(v){
+  st.desconto = Math.max(0, Number(v) || 0);
+  st.erros = {}; st.aviso = null;
+  st.foco = "iDesconto";
+  render("itens");
+}
+
+function finalizar(){
+  st.erros = {}; st.aviso = null;
+
+  if (!st.descritivo.trim())
+    st.erros.descritivo = "O descritivo do atendimento é obrigatório.";
+
+  if (!st.servicos.length && !st.produtos.length)
+    st.erros.itens = "Lance ao menos um serviço ou produto antes de finalizar.";
+
+  // mesma validação do trigger baixa_estoque_produto
+  const falta = st.produtos.find(i => {
+    const p = PRODUTOS.find(x => x.id === i.id);
+    return i.qtd > p.estoque;
+  });
+  if (falta){
+    const p = PRODUTOS.find(x => x.id === falta.id);
+    st.aviso = { tipo:"erro", titulo:"Não foi possível finalizar o atendimento",
+      texto:`Estoque insuficiente para "${p.descricao}": solicitado ${falta.qtd}, `
+          + `disponível ${p.estoque}. Ajuste a quantidade ou remova o produto.` };
+  }
+
+  const bruto = st.servicos.reduce((a,i)=>a+i.valor*i.qtd,0)
+              + st.produtos.reduce((a,i)=>a+i.valor*i.qtd,0);
+  if (st.desconto > bruto)
+    st.erros.desconto = "O desconto não pode ser maior que o valor dos itens.";
+
+  if (Object.keys(st.erros).length || st.aviso) return render("itens");
+
+  // efetiva: baixa o estoque, como o trigger faria
+  st.produtos.forEach(i => {
+    const p = PRODUTOS.find(x => x.id === i.id);
+    p.estoque -= i.qtd;
+  });
+  st.numeroGerado = 1048 + Math.floor(Math.random()*50);
+  st.totalFinal = totalAtendimento();
+  st.pontosGanhos = pontosDoTotal(st.totalFinal);
+  st.cliente.pontos += st.pontosGanhos;
+  st.dataHora = agora();
+
+  render("confirmacao");
+}
+
+// --- 6. CONFIRMAÇÃO -----------------------------------------------
+TELAS.confirmacao = {
+  rf: ['<span class="tag">RF06 — Confirmar atendimento e calcular total</span>',
+       '<span class="tag">RF07 — Creditar pontos ao cliente</span>'],
+  html(){
+    const v = VETERINARIOS.find(x => x.id === st.idVet);
+    const linhas = [
+      ...st.servicos.map(i => ({...i})),
+      ...st.produtos.map(i => ({...i})),
+    ].map(i => `
+      <tr><td>${esc(i.nome)}</td><td class="num">${i.qtd}</td>
+          <td class="num">${brl(i.valor)}</td><td class="num">${brl(i.valor*i.qtd)}</td></tr>`).join("");
+
+    return `
+      ${passos(4)}
+      <div class="aviso ok"><strong>Atendimento registrado com sucesso</strong>
+        Nº ${st.numeroGerado} · ${st.dataHora} · Status: Finalizado</div>
       <h2 class="tituloTela">Resumo do atendimento</h2>
-      <p class="descTela">Mel · Carlos Lima · Dra. Paula Andrade (CRMV 12345)</p>
+      <p class="descTela">${esc(st.animal.nome)} · ${esc(st.cliente.nome)} ·
+        ${esc(v.nome)} (CRMV ${v.crmv})</p>
       <table>
         <tr><th>Item</th><th class="num">Qtd</th><th class="num">Unitário</th><th class="num">Subtotal</th></tr>
-        <tr><td>Consulta clínica geral</td><td class="num">1</td><td class="num">R$ 120,00</td><td class="num">R$ 120,00</td></tr>
-        <tr><td>Exame dermatológico</td><td class="num">1</td><td class="num">R$ 80,00</td><td class="num">R$ 80,00</td></tr>
-        <tr><td>Antipulgas tópico 15 mg</td><td class="num">1</td><td class="num">R$ 65,00</td><td class="num">R$ 65,00</td></tr>
-        <tr><td>Shampoo medicamentoso 200 ml</td><td class="num">2</td><td class="num">R$ 45,00</td><td class="num">R$ 90,00</td></tr>
-        <tr><td colspan="3">Desconto</td><td class="num">− R$ 15,00</td></tr>
-        <tr><td colspan="3" class="total">Total</td><td class="num total">R$ 340,00</td></tr>
+        ${linhas}
+        ${st.desconto > 0 ? `<tr><td colspan="3">Desconto</td>
+          <td class="num">− ${brl(st.desconto)}</td></tr>` : ""}
+        <tr><td colspan="3" class="total">Total</td>
+            <td class="num total">${brl(st.totalFinal)}</td></tr>
       </table>
       <div style="margin-top:18px">
-        <span class="selo">+34 pontos creditados · Carlos Lima agora tem 354 pontos</span>
+        <span class="selo">+${st.pontosGanhos} pontos creditados ·
+          ${esc(st.cliente.nome)} agora tem ${st.cliente.pontos} pontos</span>
       </div>
       <div class="acoes">
-        <button class="btn p" onclick="ir(2)">Voltar ao início</button>
-        <button class="btn s" onclick="ir(3)">Novo atendimento</button>
+        <button class="btn p" onclick="render('inicio')">Voltar ao início</button>
+        <button class="btn s" onclick="novoAtendimento()">Novo atendimento</button>
       </div>
-      <div class="nota"><b>Atributos:</b> atendimento.desconto, atendimento.status, pontuacao.pontos, pontuacao.motivo
-      · <b>Regra:</b> function calcula_total_atendimento</div>
-    </div>
-  </div>
-</section>
+      <div class="nota"><b>Atributos:</b> atendimento.desconto, atendimento.status,
+      pontuacao.pontos, pontuacao.motivo · <b>Regra:</b> function calcula_total_atendimento ·
+      1 ponto a cada R$ 10</div>`;
+  }
+};
 
-<!-- 8 - CANCELAMENTO -->
-<section class="tela" data-t="8">
-  <div class="rf"><span class="tag alt">Caminho alternativo — cancelamento</span><span class="tag">RF09 — Cancelar operação em andamento</span></div>
-  <div class="frame">
-    <div class="topbar"><span class="marca">Clínica Veterinária</span><span class="user">Ana Souza · Atendente</span></div>
-    <div class="corpo" style="max-width:520px;margin:0 auto;padding:40px 20px">
-      <div class="aviso alerta">
-        <strong>Cancelar este atendimento?</strong>
-        Os itens lançados e o descritivo serão descartados. O estoque não será alterado.
-      </div>
-      <table>
-        <tr><th>Será descartado</th></tr>
-        <tr><td>Descritivo do atendimento de Mel</td></tr>
-        <tr><td>2 serviços lançados</td></tr>
-        <tr><td>2 produtos lançados</td></tr>
-      </table>
-      <div class="acoes">
-        <button class="btn p" style="background:var(--erro)" onclick="ir(2)">Sim, cancelar</button>
-        <button class="btn s" onclick="ir(5)">Não, continuar editando</button>
-      </div>
-      <div class="nota"><b>Regra:</b> nenhum registro é gravado em atendimento, atendimento_produto ou atendimento_servico</div>
-    </div>
-  </div>
-</section>
+// --- 7. CANCELAMENTO ----------------------------------------------
+TELAS.cancelar = {
+  rf: ['<span class="tag alt">Alternativo — cancelamento</span>',
+       '<span class="tag">RF08 — Cancelar operação em andamento</span>'],
+  html(){
+    const itens = [];
+    if (st.descritivo.trim()) itens.push("Descritivo do atendimento");
+    if (st.servicos.length) itens.push(`${st.servicos.length} serviço(s) lançado(s)`);
+    if (st.produtos.length) itens.push(`${st.produtos.length} produto(s) lançado(s)`);
+    if (st.animal) itens.push(`Seleção do animal ${st.animal.nome}`);
+    if (st.cliente) itens.push(`Seleção do tutor ${st.cliente.nome}`);
 
-</div>
+    const lista = itens.length
+      ? itens.map(i => `<tr><td>${esc(i)}</td></tr>`).join("")
+      : `<tr><td class="semItens">Nada foi preenchido ainda</td></tr>`;
 
-<script>
-const NOMES = ["1. Login","2. Início","3. Tutor","4. Animal","5. Serviços",
-               "6. Erro de estoque","7. Confirmação","8. Cancelamento"];
-const nav = document.getElementById("nav");
-NOMES.forEach((n,i)=>{
-  const b = document.createElement("button");
-  b.textContent = n;
-  b.onclick = ()=>ir(i+1);
-  b.dataset.n = i+1;
-  nav.appendChild(b);
-});
-
-function ir(n){
-  document.querySelectorAll(".tela").forEach(t=>t.classList.toggle("on", t.dataset.t == n));
-  nav.querySelectorAll("button").forEach(b=>b.setAttribute("aria-current", b.dataset.n == n));
-  const av = document.getElementById("avisoInativo");
-  if (av) av.innerHTML = "";
-  if (location.hash !== "#tela-"+n) history.replaceState(null,"","#tela-"+n);
-  window.scrollTo({top:0,behavior:"smooth"});
+    return `
+      <div style="max-width:520px;margin:0 auto;padding:24px 0">
+        <div class="aviso alerta"><strong>Cancelar este atendimento?</strong>
+          Os dados lançados serão descartados. O estoque não será alterado.</div>
+        <table><tr><th>Será descartado</th></tr>${lista}</table>
+        <div class="acoes">
+          <button class="btn d" onclick="confirmarCancelamento()">Sim, cancelar</button>
+          <button class="btn s" onclick="voltar(st.telaAnterior)">Não, continuar editando</button>
+        </div>
+        <div class="nota"><b>Regra:</b> nenhum registro é gravado em atendimento,
+        atendimento_produto ou atendimento_servico</div>`;
+  }
+};
+function pedirCancelamento(){
+  st.telaAnterior = st.telaAtual;
+  st.erros = {}; st.aviso = null;
+  render("cancelar");
+}
+function confirmarCancelamento(){
+  zerarAtendimento();
+  st.aviso = { tipo:"alerta", titulo:"Atendimento cancelado",
+    texto:"Nenhum dado foi gravado e o estoque permanece inalterado." };
+  render("inicio");
 }
 
-function erroInativo(){
-  document.getElementById("avisoInativo").innerHTML =
-    '<div class="aviso erro" style="margin-top:12px"><strong>Animal indisponível</strong>' +
-    'O animal "Pingo" está inativo e não pode receber atendimento. ' +
-    'Reative o cadastro ou escolha outro animal.</div>';
+// ---------------------------------------------------------------
+// RENDER
+// ---------------------------------------------------------------
+function render(nome){
+  if (!st.logado && nome !== "login") nome = "login";
+  st.telaAtual = nome;
+  const t = TELAS[nome];
+  $("rf").innerHTML = t.rf.join("");
+  $("tela").innerHTML = t.html();
+  $("user").textContent = st.logado ? `${ATENDENTE.nome} · Atendente` : "";
+
+  // campos com oninput re-renderizam a tela: devolve o cursor onde estava
+  if (st.foco){
+    const el = $(st.foco);
+    if (el){
+      el.focus();
+      if (el.type !== "number"){     // number não aceita setSelectionRange
+        const n = el.value.length;
+        try { el.setSelectionRange(n, n); } catch (e) {}
+      }
+    }
+    st.foco = null;
+  } else {
+    window.scrollTo({ top:0, behavior:"smooth" });
+  }
 }
 
-const h = (location.hash.match(/^#tela-([1-8])$/)||[])[1];
-ir(h ? Number(h) : 1);
-window.addEventListener("hashchange",()=>{
-  const m = (location.hash.match(/^#tela-([1-8])$/)||[])[1];
-  if (m) ir(Number(m));
-});
+render("login");
 </script>
 </body>
 </html>
