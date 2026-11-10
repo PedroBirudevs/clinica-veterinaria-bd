@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Protótipo Clínica Veterinária</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --azul:#1E6F8E; --azul-escuro:#15536B; --azul-claro:#E3F1F6;
+  --fundo:#FFFFFF; --superficie:#F6F9FB; --borda:#DDE6EB;
+  --texto:#16242B; --suave:#5F7580;
+  --ok:#1A7F4B; --ok-bg:#E6F4EC;
+  --erro:#C0392B; --erro-bg:#FBEBE9;
+  --alerta:#9A6700; --alerta-bg:#FFF6E0;
+}
+:root:not([data-theme="light"]){
+  @media (prefers-color-scheme: dark){
+    --fundo:#10191E; --superficie:#16222A; --borda:#26353E;
+    --texto:#E8EFF2; --suave:#9BB0BA; --azul-claro:#17313D;
+    --ok-bg:#122E22; --erro-bg:#331916; --alerta-bg:#2E2512;
+  }
+}
+:root[data-theme="dark"]{
+  --fundo:#10191E; --superficie:#16222A; --borda:#26353E;
+  --texto:#E8EFF2; --suave:#9BB0BA; --azul-claro:#17313D;
+  --ok-bg:#122E22; --erro-bg:#331916; --alerta-bg:#2E2512;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--fundo);color:var(--texto);
+  font-family:Inter,system-ui,sans-serif;font-size:15px;line-height:1.5;
+}
+.wrap{max-width:1100px;margin:0 auto;padding:28px 16px 64px}
+h1{font-size:22px;font-weight:700;margin:0 0 4px}
+.sub{color:var(--suave);font-size:14px;margin:0 0 24px}
+
+/* navegacao entre telas */
+.nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:22px;
+  padding-bottom:18px;border-bottom:1px solid var(--borda)}
+.nav button{
+  font:inherit;font-size:13px;padding:7px 12px;border-radius:7px;
+  border:1px solid var(--borda);background:var(--fundo);color:var(--suave);
+  cursor:pointer;white-space:nowrap}
+.nav button:hover{border-color:var(--azul)}
+.nav button[aria-current="true"]{background:var(--azul);border-color:var(--azul);color:#fff;font-weight:600}
+
+/* etiqueta de rastreabilidade */
+.rf{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+.tag{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:99px;
+  background:var(--azul-claro);color:var(--azul-escuro);letter-spacing:.2px}
+.tag.alt{background:var(--alerta-bg);color:var(--alerta)}
+
+/* moldura da tela */
+.tela{display:none}
+.tela.on{display:block}
+.frame{border:1px solid var(--borda);border-radius:14px;overflow:hidden;
+  background:var(--fundo);box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.topbar{display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:12px 18px;background:var(--azul);color:#fff}
+.topbar .marca{font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px}
+.topbar .user{font-size:12.5px;opacity:.9}
+.corpo{padding:22px 20px}
+.tituloTela{font-size:17px;font-weight:600;margin:0 0 3px}
+.descTela{color:var(--suave);font-size:13.5px;margin:0 0 18px}
+
+/* formulario */
+.campo{margin-bottom:14px}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--suave);
+  margin-bottom:5px;letter-spacing:.2px}
+input,select,textarea{
+  width:100%;font:inherit;font-size:14px;padding:9px 11px;border-radius:8px;
+  border:1px solid var(--borda);background:var(--superficie);color:var(--texto)}
+textarea{min-height:66px;resize:vertical}
+.dupla{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tripla{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:620px){.dupla,.tripla{grid-template-columns:1fr}}
+
+/* botoes */
+.acoes{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.btn{font:inherit;font-size:14px;font-weight:600;padding:10px 18px;
+  border-radius:8px;border:1px solid transparent;cursor:pointer}
+.btn.p{background:var(--azul);color:#fff}
+.btn.p:hover{background:var(--azul-escuro)}
+.btn.s{background:var(--fundo);color:var(--azul);border-color:var(--azul)}
+.btn.g{background:var(--fundo);color:var(--suave);border-color:var(--borda)}
+
+/* listas e cards */
+.card{border:1px solid var(--borda);border-radius:10px;padding:14px;
+  background:var(--fundo);margin-bottom:10px;cursor:pointer}
+.card:hover{border-color:var(--azul);background:var(--superficie)}
+.card.sel{border-color:var(--azul);background:var(--azul-claro)}
+.card .nome{font-weight:600;font-size:15px}
+.card .meta{color:var(--suave);font-size:13px;margin-top:3px}
+.card.inativo{opacity:.62}
+
+/* avisos */
+.aviso{border-radius:9px;padding:13px 15px;font-size:13.5px;margin-bottom:16px;
+  border-left:3px solid}
+.aviso.erro{background:var(--erro-bg);border-color:var(--erro);color:var(--erro)}
+.aviso.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+.aviso.alerta{background:var(--alerta-bg);border-color:var(--alerta);color:var(--alerta)}
+.aviso strong{display:block;margin-bottom:3px}
+.erroCampo{color:var(--erro);font-size:12.5px;margin-top:4px}
+input.ruim,select.ruim{border-color:var(--erro);background:var(--erro-bg)}
+
+/* tabela */
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:4px}
+th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;
+  color:var(--suave);padding:8px 10px;border-bottom:1px solid var(--borda)}
+td{padding:10px;border-bottom:1px solid var(--borda)}
+tr:last-child td{border-bottom:none}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.total{font-weight:700;font-size:15px}
+
+/* dashboard */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+@media(max-width:720px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{border:1px solid var(--borda);border-radius:10px;padding:14px;background:var(--superficie)}
+.kpi .v{font-size:23px;font-weight:700;line-height:1.1}
+.kpi .l{font-size:12px;color:var(--suave);margin-top:3px}
+
+/* selo de pontos */
+.selo{display:inline-flex;align-items:center;gap:7px;background:var(--azul-claro);
+  color:var(--azul-escuro);border-radius:99px;padding:5px 13px;font-size:13px;font-weight:600}
+
+.passos{display:flex;gap:6px;margin-bottom:18px;font-size:12px;flex-wrap:wrap}
+.passo{padding:4px 10px;border-radius:6px;background:var(--superficie);color:var(--suave)}
+.passo.at{background:var(--azul);color:#fff;font-weight:600}
+.passo.fim{background:var(--ok-bg);color:var(--ok)}
+
+.nota{margin-top:16px;padding:13px 15px;border:1px dashed var(--borda);
+  border-radius:9px;font-size:13px;color:var(--suave);background:var(--superficie)}
+.nota b{color:var(--texto)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Protótipo navegável — Sistema de Clínica Veterinária</h1>
+<p class="sub">Fluxo principal: registrar um atendimento. 8 telas, com caminho de erro e cancelamento.
+Referência visual para montagem no Figma.</p>
+
+<nav class="nav" id="nav"></nav>
+
+<!-- 1 - LOGIN -->
+<section class="tela" data-t="1">
+  <div class="rf"><span class="tag">RF01 — Autenticar usuário</span><span class="tag">Entidade: Pessoa / Atendente</span></div>
+  <div class="frame">
+    <div class="topbar"><span class="marca">Clínica Veterinária</span></div>
+    <div class="corpo" style="max-width:420px;margin:0 auto;padding:40px 20px">
+      <h2 class="tituloTela">Acessar o sistema</h2>
+      <p class="descTela">Informe matrícula e senha.</p>
+      <div class="campo"><label>Matrícula</label><input value="AT2026001"></div>
+      <div class="campo"><label>Senha</label><input type="password" value="••••••••"></div>
+      <div class="acoes"><button class="btn p" onclick="ir(2)">Entrar</button></div>
+      <div class="nota"><b>Atributos:</b> atendente.matricula, pessoa.nome</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 - DASHBOARD -->
+<section class="tela" data-t="2">
+  <div class="rf"><span class="tag">RF02 — Visualizar painel de atendimentos</span><span class="tag">Entidade: Atendimento</span></div>
+  <div class="frame">
+    <div class="topbar"><span class="marca">Clínica Veterinária</span><span class="user">Ana Souza · Atendente</span></div>
+    <div class="corpo">
+      <h2 class="tituloTela">Início</h2>
+      <p class="descTela">Resumo do dia.</p>
+      <div class="kpis">
+        <div class="kpi"><div class="v">12</div><div class="l">Atendimentos hoje</div></div>
+        <div class="kpi"><div class="v">3</div><div class="l">Em aberto</div></div>
+        <div class="kpi"><div class="v">R$ 2.840</div><div class="l">Faturamento do dia</div></div>
+        <div class="kpi"><div class="v">4</div><div class="l">Produtos em falta</div></div>
+      </div>
+      <h3 style="font-size:14px;margin:0 0 10px">Últimos atendimentos</h3>
+      <table>
+        <tr><th>Animal</th><th>Tutor</th><th>Veterinário</th><th>Status</th><th class="num">Total</th></tr>
+        <tr><td>Mel</td><td>Carlos Lima</td><td>Dra. Paula</td><td>Finalizado</td><td class="num">R$ 240,00</td></tr>
+        <tr><td>Thor</td><td>Juliana Reis</td><td>Dr. Marcos</td><td>Aberto</td><td class="num">R$ 95,00</td></tr>
+        <tr><td>Nina</td><td>Pedro Alves</td><td>Dra. Paula</td><td>Finalizado</td><td class="num">R$ 410,00</td></tr>
+      </table>
+      <div class="acoes"><button class="btn p" onclick="ir(3)">Novo atendimento</button></div>
+      <div class="nota"><b>Atributos:</b> atendimento.data_hora, atendimento.status, animal.nome, veterinario.crmv</div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 - BUSCAR TUTOR -->
+<section class="tela" data-t="3">
+  <div class="rf"><span class="tag">RF03 — Localizar cliente por CPF ou nome</span><span class="tag">Entidade: Cliente / Pessoa</span></div>
+  <div class="frame">
+    <div class="topbar"><span class="marca">Clínica Veterinária</span><span class="user">Ana Souza · Atendente</span></div>
+    <div class="corpo">
+      <div class="passos"><span class="passo at">1. Tutor</span><span class="passo">2. Animal</span><span class="passo">3. Serviços</span><span class="passo">4. Confirmação</span></div>
+      <h2 class="tituloTela">Identificar o tutor</h2>
+      <p class="descTela">Busque pelo CPF ou pelo nome do responsável.</p>
+      <div class="campo"><label>CPF ou nome</label><input value="Carlos"></div>
+      <div class="card sel" onclick="ir(4)">
+        <div class="nome">Carlos Lima</div>
+        <div class="meta">CPF 123.456.789-00 · (69) 99999-1234 · Nível Prata · 320 pontos</div>
+      </div>
+      <div class="card" onclick="ir(4)">
+        <div class="nome">Carlos Eduardo Nunes</div>
+        <div class="meta">CPF 987.654.321-00 · (69) 98888-4321 · Nível Bronze · 85 pontos</div>
+      </div>
+      <div class="acoes">
+        <button class="btn p" onclick="ir(4)">Continuar</button>
+        <button class="btn g" onclick="ir(2)">Cancelar</button>
+      </div>
+      <div class="nota"><b>Atributos:</b> pessoa.cpf, pessoa.nome, pessoa.telefone, nivel.nome, pontuacao.pontos</div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 - SELECIONAR ANIMAL -->
+<section class="tela" data-t="4">
+  <div class="rf"><span class="tag">RF04 — Selecionar animal do tutor</span><span class="tag alt">Caminho alternativo: animal inativo</span><span class="tag">Entidade: Animal / Espécie</span></div>
+  <div class="frame">
+    <div class="topbar"><span class="marca">Clínica Veterinária</span><span class="user">Ana Souza · Atendente</span></div>
+    <div class="corpo">
+      <div class="passos"><span class="passo fim">1. Tutor ✓</span><span class="passo at">2. Animal</span><span class="passo">3. Serviços</span><span class="passo">4. Confirmação</span></div>
+      <h2 class="tituloTela">Animais de Carlos Lima</h2>
+      <p class="descTela">Só animais ativos podem receber atendimento.</p>
+      <div class="card sel" onclick="ir(5)">
+        <div class="nome">Mel</div>
+        <div class="meta">Canina · Fêmea · 4 anos · 12,400 kg · Castrada</div>
+      </div>
+      <div class="card" onclick="ir(5)">
+        <div class="nome">Thor</div>
+        <div class="meta">Canina · Macho · 2 anos · 28,100 kg · Não castrado</div>
+      </div>
+      <div class="card inativo" onclick="erroInativo()">
+        <div class="nome">Pingo <span style="font-weight:400;font-size:12.5px;color:var(--erro)">· inativo</span></div>
+        <div class="meta">Felina · Macho · 9 anos · 4,800 kg</div>
+      </div>
+      <div id="avisoInativo"></div>
+      <div class="acoes">
+        <button class="btn p" onclick="ir(5)">Continuar</button>
+        <button class="btn s" onclick="ir(3)">Voltar</button>
+        <button class="btn g" onclick="ir(2)">Cancelar</button>
+      </div>
+      <div class="nota"><b>Atributos:</b> animal.nome, animal.sexo, animal.peso_kg, animal.castrado, animal.ativo, especie.nome
+      · <b>Regra:</b> trigger valida_tutor_do_animal</div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 - SERVICOS E PRODUTOS -->
+<section class="tela" data-t="5">
+  <div class="rf"><span class="tag">RF05 — Registrar serviços e produtos</span><span class="tag">Entidade: Serviço / Produto / Atendimento</span></div>
+  <div class="frame">
+    <div class="topbar"><span class="marca">Clínica Veterinária</span><span class="user">Ana Souza · Atendente</span></div>
+    <div class="corpo">
+      <div class="passos"><span class="passo fim">1. Tutor ✓</span><span class="passo fim">2. Animal ✓</span><span class="passo at">3. Serviços</span><span class="passo">4. Confirmação</span></div>
+      <h2 class="tituloTela">Atendimento de Mel</h2>
+      <p class="descTela">Tutor: Carlos Lima · Canina, 4 anos, 12,400 kg</p>
+      <div class="dupla">
+        <div class="campo"><label>Veterinário responsável</label>
+          <select><option>Dra. Paula Andrade — CRMV 12345</option><option>Dr. Marcos Vieira — CRMV 54321</option></select></div>
+        <div class="campo"><label>Data e hora</label><input value="10/11/2026 10:30"></div>
+      </div>
+      <div class="campo"><label>Descritivo do atendimento</label>
+        <textarea>Tutor relata coceira intensa e perda de pelo na região do dorso há cerca de uma semana.</textarea></div>
+      <h3 style="font-size:14px;margin:18px 0 8px">Serviços</h3>
+      <table>
+        <tr><th>Serviço</th><th class="num">Qtd</th><th class="num">Valor</th></tr>
+        <tr><td>Consulta clínica geral</td><td class="num">1</td><td class="num">R$ 120,00</td></tr>
+        <tr><td>Exame dermatológico</td><td class="num">1</td><td class="num">R$ 80,00</td></tr>
+      </table>
+      <h3 style="font-size:14px;margin:18px 0 8px">Produtos</h3>
+      <table>
+        <tr><th>Produto</th><th class="num">Qtd</th><th class="num">Estoque</th><th class="num">Valor</th></tr>
+        <tr><td>Antipulgas tópico 15 mg</td><td class="num">1</td><td class="num">8</td><td class="num">R$ 65,00</td></tr>
+        <tr><td>Shampoo medicamentoso 200 ml</td><td class="num" style="color:var(--erro);font-weight:600">3</td><td class="num">2</td><td class="num">R$ 45,00</td></tr>
+      </table>
+      <div class="acoes">
+        <button class="btn p" onclick="ir(6)">Finalizar atendimento</button>
+        <button class="btn s" onclick="ir(4)">Voltar</button>
+        <button class="btn g" onclick="ir(8)">Cancelar</button>
+      </div>
+      <div class="nota"><b>Atributos:</b> atendimento.descritivo, atendimento.data_hora, servico.valor_padrao,
+      produto.estoque_atual, atendimento_produto.quantidade, atendimento_servico.valor_unitario</div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 - ERRO DE ESTOQUE -->
+<section class="tela" data-t="6">
+  <div class="rf"><span class="tag alt">Caminho de erro — falha de validação</span><span class="tag">RF06 — Validar estoque antes de confirmar</span></div>
+  <div class="frame">
+    <div class="topbar"><span class="marca">Clínica Veterinária</span><span class="user">Ana Souza · Atendente</span></div>
+    <div class="corpo">
+      <div class="passos"><span class="passo fim">1. Tutor ✓</span><span class="passo fim">2. Animal ✓</span><span class="passo at">3. Serviços</span><span class="passo">4. Confirmação</span></div>
+      <div class="aviso erro">
+        <strong>Não foi possível finalizar o atendimento</strong>
+        Estoque insuficiente para "Shampoo medicamentoso 200 ml": solicitado 3, disponível 2.
+        Ajuste a quantidade ou remova o produto.
+      </div>
+      <h2 class="tituloTela">Atendimento de Mel</h2>
+      <p class="descTela">Tutor: Carlos Lima · Canina, 4 anos, 12,400 kg</p>
+      <h3 style="font-size:14px;margin:18px 0 8px">Produtos</h3>
+      <table>
+        <tr><th>Produto</th><th class="num">Qtd</th><th class="num">Estoque</th><th class="num">Valor</th></tr>
+        <tr><td>Antipulgas tópico 15 mg</td><td class="num">1</td><td class="num">8</td><td class="num">R$ 65,00</td></tr>
+      </table>
+      <div class="campo" style="margin-top:14px;max-width:320px">
+        <label>Shampoo medicamentoso 200 ml — quantidade</label>
+        <input class="ruim" value="3">
+        <div class="erroCampo">Máximo disponível: 2 unidades</div>
+      </div>
+      <div class="acoes">
+        <button class="btn p" onclick="ir(7)">Corrigir e finalizar</button>
+        <button class="btn s" onclick="ir(5)">Voltar</button>
+        <button class="btn g" onclick="ir(8)">Cancelar atendimento</button>
+      </div>
+      <div class="nota"><b>Regra:</b> trigger baixa_estoque_produto — bloqueia quando quantidade &gt; produto.estoque_atual</div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 - CONFIRMACAO -->
+<section class="tela" data-t="7">
+  <div class="rf"><span class="tag">RF07 — Confirmar atendimento e calcular total</span><span class="tag">RF08 — Creditar pontos ao cliente</span></div>
+  <div class="frame">
+    <div class="topbar"><span class="marca">Clínica Veterinária</span><span class="user">Ana Souza · Atendente</span></div>
+    <div class="corpo">
+      <div class="passos"><span class="passo fim">1. Tutor ✓</span><span class="passo fim">2. Animal ✓</span><span class="passo fim">3. Serviços ✓</span><span class="passo at">4. Confirmação</span></div>
+      <div class="aviso ok">
+        <strong>Atendimento registrado com sucesso</strong>
+        Nº 1048 · 10/11/2026 às 10:30 · Status: Finalizado
+      </div>
+      <h2 class="tituloTela">Resumo do atendimento</h2>
+      <p class="descTela">Mel · Carlos Lima · Dra. Paula Andrade (CRMV 12345)</p>
+      <table>
+        <tr><th>Item</th><th class="num">Qtd</th><th class="num">Unitário</th><th class="num">Subtotal</th></tr>
+        <tr><td>Consulta clínica geral</td><td class="num">1</td><td class="num">R$ 120,00</td><td class="num">R$ 120,00</td></tr>
+        <tr><td>Exame dermatológico</td><td class="num">1</td><td class="num">R$ 80,00</td><td class="num">R$ 80,00</td></tr>
+        <tr><td>Antipulgas tópico 15 mg</td><td class="num">1</td><td class="num">R$ 65,00</td><td class="num">R$ 65,00</td></tr>
+        <tr><td>Shampoo medicamentoso 200 ml</td><td class="num">2</td><td class="num">R$ 45,00</td><td class="num">R$ 90,00</td></tr>
+        <tr><td colspan="3">Desconto</td><td class="num">− R$ 15,00</td></tr>
+        <tr><td colspan="3" class="total">Total</td><td class="num total">R$ 340,00</td></tr>
+      </table>
+      <div style="margin-top:18px">
+        <span class="selo">+34 pontos creditados · Carlos Lima agora tem 354 pontos</span>
+      </div>
+      <div class="acoes">
+        <button class="btn p" onclick="ir(2)">Voltar ao início</button>
+        <button class="btn s" onclick="ir(3)">Novo atendimento</button>
+      </div>
+      <div class="nota"><b>Atributos:</b> atendimento.desconto, atendimento.status, pontuacao.pontos, pontuacao.motivo
+      · <b>Regra:</b> function calcula_total_atendimento</div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 - CANCELAMENTO -->
+<section class="tela" data-t="8">
+  <div class="rf"><span class="tag alt">Caminho alternativo — cancelamento</span><span class="tag">RF09 — Cancelar operação em andamento</span></div>
+  <div class="frame">
+    <div class="topbar"><span class="marca">Clínica Veterinária</span><span class="user">Ana Souza · Atendente</span></div>
+    <div class="corpo" style="max-width:520px;margin:0 auto;padding:40px 20px">
+      <div class="aviso alerta">
+        <strong>Cancelar este atendimento?</strong>
+        Os itens lançados e o descritivo serão descartados. O estoque não será alterado.
+      </div>
+      <table>
+        <tr><th>Será descartado</th></tr>
+        <tr><td>Descritivo do atendimento de Mel</td></tr>
+        <tr><td>2 serviços lançados</td></tr>
+        <tr><td>2 produtos lançados</td></tr>
+      </table>
+      <div class="acoes">
+        <button class="btn p" style="background:var(--erro)" onclick="ir(2)">Sim, cancelar</button>
+        <button class="btn s" onclick="ir(5)">Não, continuar editando</button>
+      </div>
+      <div class="nota"><b>Regra:</b> nenhum registro é gravado em atendimento, atendimento_produto ou atendimento_servico</div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+const NOMES = ["1. Login","2. Início","3. Tutor","4. Animal","5. Serviços",
+               "6. Erro de estoque","7. Confirmação","8. Cancelamento"];
+const nav = document.getElementById("nav");
+NOMES.forEach((n,i)=>{
+  const b = document.createElement("button");
+  b.textContent = n;
+  b.onclick = ()=>ir(i+1);
+  b.dataset.n = i+1;
+  nav.appendChild(b);
+});
+
+function ir(n){
+  document.querySelectorAll(".tela").forEach(t=>t.classList.toggle("on", t.dataset.t == n));
+  nav.querySelectorAll("button").forEach(b=>b.setAttribute("aria-current", b.dataset.n == n));
+  const av = document.getElementById("avisoInativo");
+  if (av) av.innerHTML = "";
+  if (location.hash !== "#tela-"+n) history.replaceState(null,"","#tela-"+n);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function erroInativo(){
+  document.getElementById("avisoInativo").innerHTML =
+    '<div class="aviso erro" style="margin-top:12px"><strong>Animal indisponível</strong>' +
+    'O animal "Pingo" está inativo e não pode receber atendimento. ' +
+    'Reative o cadastro ou escolha outro animal.</div>';
+}
+
+const h = (location.hash.match(/^#tela-([1-8])$/)||[])[1];
+ir(h ? Number(h) : 1);
+window.addEventListener("hashchange",()=>{
+  const m = (location.hash.match(/^#tela-([1-8])$/)||[])[1];
+  if (m) ir(Number(m));
+});
+</script>
+</body>
+</html>
